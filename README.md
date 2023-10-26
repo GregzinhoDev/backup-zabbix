@@ -1,14 +1,17 @@
-Backup do Banco de Dados do Zabbix e Armazenamento via FTP
+# Backup do Banco de Dados do Zabbix e Armazenamento via FTP
+
 Este repositório contém um script que realiza backup do banco de dados do Zabbix e, em seguida, armazena o backup em um servidor de armazenamento via FTP.
 
-Requisitos
-Zabbix Server instalado
-Acesso ao banco de dados do Zabbix
-Servidor FTP para armazenamento dos backups
-Configuração
-Clone o repositório:
-bash
-Copy code
+## Requisitos
+
+- Zabbix Server instalado
+- Acesso ao banco de dados do Zabbix
+- Servidor FTP para armazenamento dos backups
+
+## Configuração
+
+1. Clone o repositório:
+```bash
 git clone [URL_DO_REPOSITÓRIO]
 Navegue até a pasta do projeto:
 bash
