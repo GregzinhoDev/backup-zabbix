@@ -1,7 +1,7 @@
 
 # Script de Backup para o Banco de Dados Zabbix
 
-Este repositório contém scripts para fazer backup do banco de dados Zabbix e exportar o backup via FTP.
+Este repositório contém scripts para fazer backup do banco de dados Zabbix (PostgreSQL) e exportar o backup via FTP.
 
 ## Arquivos
 
