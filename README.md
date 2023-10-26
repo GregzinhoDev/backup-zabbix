@@ -1,57 +1,71 @@
-# Backup do Banco de Dados do Zabbix e Armazenamento via FTP
 
-Este repositório contém um script que realiza backup do banco de dados do Zabbix e, em seguida, armazena o backup em um servidor de armazenamento via FTP.
+# Script de Backup para o Banco de Dados Zabbix
 
-## Requisitos
+Este repositório contém scripts para fazer backup do banco de dados Zabbix e exportar o backup via FTP.
 
-- Zabbix Server instalado
-- Acesso ao banco de dados do Zabbix
-- Servidor FTP para armazenamento dos backups
+## Arquivos
 
-## Configuração
+1. `config-script-zabbix.sh`: Define as variáveis de configuração para o banco de dados, local de backup e servidor FTP.
+2. `script-zabbix.sh`: Realiza o backup do banco de dados e o envia para um servidor FTP.
 
-1. Clone o repositório:
+## Como usar
+
+1. Modifique o arquivo `config-script-zabbix.sh` com suas informações:
+   - Configurações do banco de dados (host, nome, usuário e senha).
+   - Diretório temporário para o backup.
+   - Configurações do servidor FTP (host, usuário, senha e destino).
+
+2. Execute o script `script-zabbix.sh` para iniciar o processo de backup:
+   ```bash
+   ./script-zabbix.sh
+   ```
+
+## Funcionalidade do Script
+
+1. Realiza o backup do banco de dados Zabbix usando `pg_dump`.
+2. Exporta o arquivo de backup para um servidor FTP usando `lftp`.
+3. Mantém apenas os últimos 7 backups no servidor FTP, removendo os mais antigos.
+
+---
+
+**Nota**: Certifique-se de ter os programas `pg_dump` e `lftp` instalados em seu servidor e de dar permissões de execução para os scripts.
+
+
+### Configurando Permissões
+
+#### Permissão somente para o usuário root no arquivo de configuração
+
+Para garantir que somente o usuário `root` tenha acesso ao arquivo de configuração (que contém informações sensíveis como senhas), execute o seguinte comando:
+
 ```bash
-git clone [URL_DO_REPOSITÓRIO]
-Navegue até a pasta do projeto:
-bash
-Copy code
-cd [NOME_DA_PASTA_DO_REPOSITÓRIO]
-Edite o arquivo config.ini com suas configurações de banco de dados e FTP. Certifique-se de fornecer todos os detalhes corretamente.
-ini
-Copy code
-[DATABASE]
-HOST = seu_host
-PORT = sua_porta
-USER = seu_usuário
-PASSWORD = sua_senha
-DB_NAME = nome_do_banco
+sudo chown root:root config-script-zabbix.sh
+sudo chmod 600 config-script-zabbix.sh
+```
 
-[FTP]
-HOST = ftp_host
-PORT = ftp_porta
-USER = ftp_usuário
-PASSWORD = ftp_senha
-Torne o script executável:
-bash
-Copy code
-chmod +x backup_zabbix_ftp.sh
-Uso
-Para executar o script de backup:
+O comando acima define o dono e o grupo do arquivo para `root` e configura as permissões para que somente o dono (root) possa ler e escrever no arquivo, enquanto todos os outros não têm permissões.
 
-bash
-Copy code
-./backup_zabbix_ftp.sh
-O script irá:
+#### Permissão de execução no arquivo principal
 
-Realizar backup do banco de dados do Zabbix.
-Compactar o backup.
-Transferir o backup compactado para o servidor FTP configurado.
-Agendamento
-Você pode agendar esse script para ser executado automaticamente em intervalos regulares usando o cron. Por exemplo, para executar o script todos os dias às 2 da manhã, você pode adicionar a seguinte linha ao seu crontab:
+Para dar permissão de execução ao script principal, execute o seguinte comando:
 
-bash
-Copy code
-0 2 * * * /caminho/absoluto/para/backup_zabbix_ftp.sh
-Contribuições
-Sugestões e contribuições são bem-vindas! Por favor, abra uma issue ou faça um pull request.
+```bash
+sudo chmod +x script-zabbix.sh
+```
+
+### Criando uma Cron Job para Execução Diária
+
+Para executar o script diariamente, por exemplo, às 2h da manhã, você pode configurar uma tarefa cron. Primeiro, abra o crontab do usuário root com o seguinte comando:
+
+```bash
+sudo crontab -e
+```
+
+Em seguida, adicione a seguinte linha ao arquivo:
+
+```
+0 2 * * * /caminho/absoluto/para/script-zabbix.sh
+```
+
+Certifique-se de substituir `/caminho/absoluto/para/` pelo caminho correto onde o seu script está localizado.
+
+Salve e feche o arquivo. A cron job agora está configurada para executar o script todos os dias às 2h da manhã.
